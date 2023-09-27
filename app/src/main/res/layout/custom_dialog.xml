@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="15dp">
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/app_name"
+        android:textSize="22sp"
+        android:textAlignment="center" />
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/txt__qty_input"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        app:errorEnabled="true"
+        android:textColorHint="@color/black"
+        style="@style/LoginTextInputLayoutStyle">
+
+        <androidx.appcompat.widget.AppCompatEditText
+            android:lines="1"
+            android:hint="Quantity"
+            android:textColor="@color/black"
+            android:textColorHint="@color/gray"
+            android:backgroundTint="@color/gray_light"
+            android:inputType="number"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:imeOptions="actionNext"
+            android:textCursorDrawable="@null"
+            app:backgroundTint="@android:color/white"/>
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp">
+        <Button
+            android:textAllCaps="false"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/menu1"
+            android:text="Cancel"
+            android:textColor="#ffffff"
+            android:layout_weight="1"
+            android:id="@+id/btn_cancel"/>
+        <LinearLayout
+            android:layout_width="50dp"
+            android:layout_height="match_parent" />
+        <Button
+            android:textAllCaps="false"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/green"
+            android:text="Add"
+            android:textColor="#ffffff"
+            android:layout_weight="1"
+            android:id="@+id/btn_okay"/>
+    </LinearLayout>
+</LinearLayout>

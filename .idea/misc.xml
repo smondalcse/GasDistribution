@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="DesignSurface">
+    <option name="filePathToZoomLevelMap">
+      <map>
+        <entry key="..\:/Android Office Project/GasDistribution/app/src/main/res/drawable/ic_search.xml" value="0.20833333333333334" />
+        <entry key="..\:/Android Office Project/GasDistribution/app/src/main/res/drawable/rectangle.xml" value="0.20833333333333334" />
+        <entry key="..\:/Android Office Project/GasDistribution/app/src/main/res/drawable/rectangle_border.xml" value="0.20833333333333334" />
+        <entry key="..\:/Android Office Project/GasDistribution/app/src/main/res/drawable/tabbuttoncontainerleft.xml" value="0.20833333333333334" />
+        <entry key="..\:/Android Office Project/GasDistribution/app/src/main/res/drawable/tabbuttoncontainermiddle.xml" value="0.20833333333333334" />
+        <entry key="..\:/Android Office Project/GasDistribution/app/src/main/res/layout/activity_login.xml" value="0.1921875" />
+        <entry key="..\:/Android Office Project/GasDistribution/app/src/main/res/layout/activity_sales.xml" value="0.25" />
+        <entry key="..\:/Android Office Project/GasDistribution/app/src/main/res/layout/activity_sales_new.xml" value="0.1921875" />
+        <entry key="..\:/Android Office Project/GasDistribution/app/src/main/res/layout/custom_dialog.xml" value="0.1921875" />
+        <entry key="..\:/Android Office Project/GasDistribution/app/src/main/res/layout/layout_item_row.xml" value="0.1921875" />
+        <entry key="..\:/Android Office Project/GasDistribution/app/src/main/res/layout/layout_itemmodel_sugg_row.xml" value="0.1921875" />
+        <entry key="..\:/Android Office Project/GasDistribution/app/src/main/res/layout/layout_order_collection_item_row.xml" value="0.1921875" />
+        <entry key="..\:/Android Office Project/GasDistribution/app/src/main/res/layout/layout_order_item_row.xml" value="0.1921875" />
+        <entry key="..\:/Android Office Project/GasDistribution1/GasDistribution/app/src/main/res/layout/activity_login.xml" value="0.1921875" />
+        <entry key="..\:/Android Office Project/GasDistribution1/GasDistribution/app/src/main/res/layout/activity_sales_new.xml" value="0.144140625" />
+        <entry key="..\:/Android Office Project/GasDistribution1/GasDistribution/app/src/main/res/layout/activity_test.xml" value="0.1921875" />
+        <entry key="..\:/Android Office Project/GasDistribution1/GasDistribution/app/src/main/res/layout/layout_order_item_row.xml" value="0.144140625" />
+        <entry key="..\:/Android Office Project/GasDistribution2/GasDistribution/app/src/main/res/layout/activity_sales.xml" value="0.18923076923076923" />
+        <entry key="..\:/Android Office Project/GasDistribution2/GasDistribution/app/src/main/res/layout/activity_sales_new.xml" value="0.1921875" />
+        <entry key="..\:/Android Office Project/GasDistribution2/GasDistribution/app/src/main/res/layout/layout_bottom_sheet_customer.xml" value="0.1921875" />
+        <entry key="..\:/Android Office Project/GasDistribution2/GasDistribution/app/src/main/res/layout/layout_bottom_sheet_item.xml" value="0.18923076923076923" />
+        <entry key="..\:/Android Office Project/GasDistribution2/GasDistribution/app/src/main/res/layout/layout_customer_row.xml" value="0.1921875" />
+        <entry key="..\:/Android Office Project/GasDistribution2/GasDistribution/app/src/main/res/layout/layout_item_row.xml" value="0.1921875" />
+        <entry key="..\:/Android Office Project/GasDistribution2/GasDistribution/app/src/main/res/layout/layout_itemmodel_sugg_row.xml" value="0.1921875" />
+        <entry key="..\:/Android Office Project/GasDistribution2/GasDistribution/app/src/main/res/layout/layout_order_item_row.xml" value="0.1921875" />
+        <entry key="..\:/Android Office Project/GasDistribution2/GasDistribution/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" value="0.20833333333333334" />
+        <entry key="..\:/Android Office Project/New folder (2)/GasDistribution/app/src/main/res/drawable/rectangle.xml" value="0.20833333333333334" />
+        <entry key="..\:/Android Office Project/New folder (2)/GasDistribution/app/src/main/res/layout/activity_collection.xml" value="0.33" />
+        <entry key="..\:/Android Office Project/New folder (2)/GasDistribution/app/src/main/res/layout/activity_contact.xml" value="0.1921875" />
+        <entry key="..\:/Android Office Project/New folder (2)/GasDistribution/app/src/main/res/layout/activity_contact_new.xml" value="0.1921875" />
+        <entry key="..\:/Android Office Project/New folder (2)/GasDistribution/app/src/main/res/layout/activity_customer.xml" value="0.33" />
+        <entry key="..\:/Android Office Project/New folder (2)/GasDistribution/app/src/main/res/layout/activity_dashboard.xml" value="0.1921875" />
+        <entry key="..\:/Android Office Project/New folder (2)/GasDistribution/app/src/main/res/layout/activity_login.xml" value="0.1921875" />
+        <entry key="..\:/Android Office Project/New folder (2)/GasDistribution/app/src/main/res/layout/activity_sales_new.xml" value="0.1921875" />
+        <entry key="..\:/Android Office Project/New folder (2)/GasDistribution/app/src/main/res/layout/contacts_rv_item.xml" value="0.1921875" />
+        <entry key="..\:/Android Office Project/New folder (2)/GasDistribution/app/src/main/res/layout/layout_bottom_sheet_contact.xml" value="0.1921875" />
+        <entry key="..\:/Android Office Project/New folder (2)/GasDistribution/app/src/main/res/layout/layout_bottom_sheet_customer.xml" value="0.1921875" />
+        <entry key="..\:/Android Office Project/New folder (2)/GasDistribution/app/src/main/res/layout/layout_itemmodel_sugg_row.xml" value="0.1921875" />
+        <entry key="..\:/Android Office Project/New folder/GasDistribution/app/src/main/res/drawable/rectangle_blackk.xml" value="0.20833333333333334" />
+        <entry key="..\:/Android Office Project/New folder/GasDistribution/app/src/main/res/layout/activity_collection.xml" value="0.1921875" />
+        <entry key="..\:/Android Office Project/New folder/GasDistribution/app/src/main/res/layout/activity_sales_new.xml" value="0.17" />
+        <entry key="..\:/Android/Practise/GasDistribution/app/src/main/res/drawable/ic_add.xml" value="0.205" />
+        <entry key="..\:/Android/Practise/GasDistribution/app/src/main/res/drawable/rectangle.xml" value="0.252" />
+        <entry key="..\:/Android/Practise/GasDistribution/app/src/main/res/drawable/rectangle_blackk.xml" value="0.252" />
+        <entry key="..\:/Android/Practise/GasDistribution/app/src/main/res/drawable/rectangle_no_border.xml" value="0.252" />
+        <entry key="..\:/Android/Practise/GasDistribution/app/src/main/res/layout/activity_collection.xml" value="0.25" />
+        <entry key="..\:/Android/Practise/GasDistribution/app/src/main/res/layout/activity_customer.xml" value="0.36102564102564105" />
+        <entry key="..\:/Android/Practise/GasDistribution/app/src/main/res/layout/activity_dashboard.xml" value="0.36666666666666664" />
+        <entry key="..\:/Android/Practise/GasDistribution/app/src/main/res/layout/activity_exchange.xml" value="0.35260416666666666" />
+        <entry key="..\:/Android/Practise/GasDistribution/app/src/main/res/layout/activity_login.xml" value="0.36102564102564105" />
+        <entry key="..\:/Android/Practise/GasDistribution/app/src/main/res/layout/activity_report.xml" value="0.36666666666666664" />
+        <entry key="..\:/Android/Practise/GasDistribution/app/src/main/res/layout/activity_sales_new.xml" value="0.2611111111111111" />
+        <entry key="..\:/Android/Practise/GasDistribution/app/src/main/res/layout/layout_bottom_sheet_customer.xml" value="0.36666666666666664" />
+        <entry key="..\:/Android/Practise/GasDistribution/app/src/main/res/layout/layout_bottom_sheet_item.xml" value="0.36666666666666664" />
+        <entry key="..\:/Android/Practise/GasDistribution/app/src/main/res/layout/layout_bottom_sheet_warehouse.xml" value="0.36666666666666664" />
+        <entry key="..\:/Android/Practise/GasDistribution/app/src/main/res/layout/layout_customer_row.xml" value="0.36666666666666664" />
+        <entry key="..\:/Android/Practise/GasDistribution/app/src/main/res/layout/layout_exchange_item_row.xml" value="0.36666666666666664" />
+        <entry key="..\:/Android/Practise/GasDistribution/app/src/main/res/layout/layout_order_item_row.xml" value="0.36666666666666664" />
+        <entry key="..\:/Android/Practise/GasDistribution/app/src/main/res/layout/layout_report_item_row.xml" value="0.36666666666666664" />
+      </map>
+    </option>
+  </component>
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_1_8" default="true" project-jdk-name="1.8" project-jdk-type="JavaSDK">
+    <output url="file://$PROJECT_DIR$/build/classes" />
+  </component>
+  <component name="ProjectType">
+    <option name="id" value="Android" />
+  </component>
+</project>
