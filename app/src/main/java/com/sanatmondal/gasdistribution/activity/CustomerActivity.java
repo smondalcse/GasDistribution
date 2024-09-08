@@ -477,6 +477,7 @@ public class CustomerActivity extends AppCompatActivity {
     BottomSheetDialog bottomSheetDialogWarehouse;
     WarehouseModelAdapter adapterWarehouse;
     List<WarehouseModel> mWarehouse = new ArrayList<>();
+
     private void WarehouseBottomSheet() {
         Log.i(TAG, "WarehouseBottomSheet: ");
         bottomSheetDialogWarehouse = new BottomSheetDialog(CustomerActivity.this, R.style.Theme_Design_BottomSheetDialog);

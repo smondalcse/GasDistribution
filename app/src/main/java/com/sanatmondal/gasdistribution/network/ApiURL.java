@@ -1,7 +1,7 @@
 package com.sanatmondal.gasdistribution.network;
 
 public class ApiURL {
-    String url = "http://173.208.142.72/delowarenterprise/gasapi/version1/";
+    String url = "http://152.89.106.226/gasdistribution/gasapi/version1/";
 
     public String getLoginURL(String UserID, String Pass){
         String method = "login?";
@@ -33,6 +33,11 @@ public class ApiURL {
 
     public String getAllItemList(){
         String method = "allitemlist";
+        return (url + method);
+    }
+
+    public String ALLItemListForExchange(){
+        String method = "ALLItemListForExchange";
         return (url + method);
     }
 

@@ -669,7 +669,7 @@ public class ExchangeActivity extends AppCompatActivity
                 break;
             case R.id.btnItem:
                 //getOrderItemList(userModel.getOrderNo());
-                getAllItemList(userModel.getOrderNo());
+                getALLItemListForExchange(userModel.getOrderNo());
                 break;
             case R.id.btnAllItem:
                 getAllItemList(userModel.getOrderNo());
@@ -858,7 +858,55 @@ public class ExchangeActivity extends AppCompatActivity
 
         final ProgressDialog dialog = ProgressDialog.show(this, "", "Please wait...", false, false);
         String URL = apiURL.getAllItemList();
-        Log.i(TAG, "getAllItemList: " + URL);
+        Log.i(TAG, "ALLItemListForExchange: " + URL);
+        StringRequest request = new StringRequest(URL, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                Log.i(TAG, "onResponse: ");
+                Log.i(TAG, "onResponse: " + response);
+                GsonBuilder builder = new GsonBuilder();
+                Gson gson = builder.create();
+                ItemResponse itemResponse = gson.fromJson(response, ItemResponse.class);
+
+                mItemModels.clear();
+                mItemModels.addAll(itemResponse.getData());
+                adapterItem.notifyDataSetChanged();
+                bottomSheetDialogItem.show();
+                dialog.dismiss();
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                dialog.dismiss();
+                Log.i(TAG, "onErrorResponse: " + error.getMessage());
+            }
+        });
+
+        RequestQueue queue = Volley.newRequestQueue(this);
+        queue.add(request);
+        request.setRetryPolicy(new RetryPolicy() {
+            @Override
+            public int getCurrentTimeout() {
+                return 50000;
+            }
+
+            @Override
+            public int getCurrentRetryCount() {
+                return 50000;
+            }
+
+            @Override
+            public void retry(VolleyError error) throws VolleyError {
+
+            }
+        });
+    }
+
+    private void getALLItemListForExchange(String Orderno){
+
+        final ProgressDialog dialog = ProgressDialog.show(this, "", "Please wait...", false, false);
+        String URL = apiURL.ALLItemListForExchange();
+        Log.i(TAG, "ALLItemListForExchange: " + URL);
         StringRequest request = new StringRequest(URL, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
