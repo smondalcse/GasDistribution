@@ -41,6 +41,13 @@ public class ApiURL {
         return (url + method);
     }
 
+    public String WhWiseEmptyCylenderItemList(String WHID){
+        String method = "WhWiseEmptyCylenderItemList?";
+        String params = "WarehouseID=" + WHID;
+        return (url + method + params);
+    }
+
+
     public String getTempOrderSales(String OrderNo){
         String method = "SelectOrderbyOrderNoForSalesCollection/" + OrderNo;
         return (url + method);

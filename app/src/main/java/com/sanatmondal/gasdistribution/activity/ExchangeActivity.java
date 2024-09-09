@@ -123,6 +123,7 @@ public class ExchangeActivity extends AppCompatActivity
       //  buildRecycleViewCollection();
         //getTempOrderSales();
 
+        deleteTempDataUserWise(userID, "first");
     }
 
     private void getURL() {
@@ -399,6 +400,7 @@ public class ExchangeActivity extends AppCompatActivity
                 txtWHName.setText(mData.get(position).getWarehouseName());
                 selectedWarehouseModel = mData.get(position);
                 bottomSheetDialogWarehouse.dismiss();
+                resetItemValue();
             }
         });
 
@@ -669,7 +671,11 @@ public class ExchangeActivity extends AppCompatActivity
                 break;
             case R.id.btnItem:
                 //getOrderItemList(userModel.getOrderNo());
-                getALLItemListForExchange(userModel.getOrderNo());
+                if (selectedWarehouseModel != null) {
+                    getALLItemListForExchange(selectedWarehouseModel.getWHNo());
+                } else {
+                    Toast.makeText(this, "Select Warehouse first.", Toast.LENGTH_SHORT).show();
+                }
                 break;
             case R.id.btnAllItem:
                 getAllItemList(userModel.getOrderNo());
@@ -682,17 +688,14 @@ public class ExchangeActivity extends AppCompatActivity
                     Toast.makeText(this, "No Item or collection found for cancel.", Toast.LENGTH_SHORT).show();
                     return;
                 }
-                deleteTempDataUserWise(userID);
+                deleteTempDataUserWise(userID, "cancel");
                 break;
             case R.id.btnSave:
-
-                if (mTempOrderCollection.size() <= 0 && mTempOrderSale.size() <= 0)
-                {
+                if (mTempOrderCollection.size() <= 0 && mTempOrderSale.size() <= 0) {
                     Toast.makeText(getApplicationContext(), "No item found for save.", Toast.LENGTH_SHORT).show();
                     return;
                 }
                 showOrderSaveAlert();
-
                 break;
         }
     }
@@ -902,10 +905,10 @@ public class ExchangeActivity extends AppCompatActivity
         });
     }
 
-    private void getALLItemListForExchange(String Orderno){
+    private void getALLItemListForExchange(String WHID){
 
         final ProgressDialog dialog = ProgressDialog.show(this, "", "Please wait...", false, false);
-        String URL = apiURL.ALLItemListForExchange();
+        String URL = apiURL.WhWiseEmptyCylenderItemList(WHID);
         Log.i(TAG, "ALLItemListForExchange: " + URL);
         StringRequest request = new StringRequest(URL, new Response.Listener<String>() {
             @Override
@@ -1435,10 +1438,10 @@ public class ExchangeActivity extends AppCompatActivity
         }
     }
 
-    private void deleteTempDataUserWise(String UserID){
+    private void deleteTempDataUserWise(String UserID, String callingTime){
 
         final ProgressDialog dialog = ProgressDialog.show(this, "", "Please wait...", false, false);
-        String URL = apiURL.deleteTempDataUserWise(userModel.getOrderNo());
+        String URL = apiURL.deleteTempDataUserWise(UserID);
         Log.i(TAG, "deleteTempDataUserWise: " + URL);
         StringRequest request = new StringRequest(Request.Method.POST, URL, new Response.Listener<String>() {
             @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
@@ -1451,7 +1454,8 @@ public class ExchangeActivity extends AppCompatActivity
                     ResponseTempOrderSale res = gson.fromJson(response, ResponseTempOrderSale.class);
 
                     if(res.getSuccess()){
-                        Toast.makeText(ExchangeActivity.this, "Order Cancel success.", Toast.LENGTH_SHORT).show();
+                        if(!callingTime.equalsIgnoreCase("first"))
+                            Toast.makeText(ExchangeActivity.this, "Clear success.", Toast.LENGTH_SHORT).show();
                         mTempOrderSale.clear();
                         mTempOrderCollection.clear();
                         salesCollectionItemAdapter.notifyDataSetChanged();
@@ -1541,8 +1545,7 @@ public class ExchangeActivity extends AppCompatActivity
                 .setMessage(msgDefault)
                 .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
-                        if (mTempOrderSale.size() <= 0)
-                        {
+                        if (mTempOrderSale.size() <= 0) {
                             Toast.makeText(getApplicationContext(), "No item found for save.", Toast.LENGTH_SHORT).show();
                             return;
                         }
