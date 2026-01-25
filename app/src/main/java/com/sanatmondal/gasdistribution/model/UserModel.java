@@ -10,6 +10,12 @@ public class UserModel implements Serializable {
     @SerializedName("OrderNo")
     @Expose
     private String orderNo;
+    @SerializedName("WHNo")
+    @Expose
+    private String wHNo;
+    @SerializedName("WarehouseName")
+    @Expose
+    private String warehouseName;
     @SerializedName("UserID")
     @Expose
     private String userID;
@@ -195,5 +201,19 @@ public class UserModel implements Serializable {
         this.userGroup = userGroup;
     }
 
+    public String getwHNo() {
+        return wHNo;
+    }
 
+    public void setwHNo(String wHNo) {
+        this.wHNo = wHNo;
+    }
+
+    public String getWarehouseName() {
+        return warehouseName;
+    }
+
+    public void setWarehouseName(String warehouseName) {
+        this.warehouseName = warehouseName;
+    }
 }

@@ -271,7 +271,17 @@ public class SalesActivity extends AppCompatActivity implements View.OnClickList
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     public void onClick(View view) {
-        switch (view.getId()) {
+
+        int id = view.getId();
+        if (id == R.id.btnGive){
+            enableDisableButtonLikeTab(0);
+            orderType = "1";
+        } else if (id == R.id.btnGive){
+            enableDisableButtonLikeTab(1);
+            orderType = "2";
+        }
+        /*
+            switch (view.getId()) {
             case R.id.btnSales:
                 enableDisableButtonLikeTab(0);
                 orderType = "1";
@@ -280,7 +290,7 @@ public class SalesActivity extends AppCompatActivity implements View.OnClickList
                 enableDisableButtonLikeTab(1);
                 orderType = "2";
                 break;
-        }
+        }*/
     }
 
     private void getOrderItemList(String Orderno){

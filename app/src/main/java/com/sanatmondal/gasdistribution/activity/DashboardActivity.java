@@ -38,7 +38,7 @@ public class DashboardActivity extends AppCompatActivity {
     private void setModelValue() {
         Log.i(TAG, "setModelValue: ");
         txtUserName.setText("UserID: " + userModel.getEmployeeID());
-        txtOrderID.setText("Order ID: " + userModel.getOrderNo());
+        txtOrderID.setText("Order ID: " + userModel.getOrderNo() + "\n" + "WareHouse: " + userModel.getWarehouseName());
     }
 
     private void getparams() {
@@ -54,7 +54,7 @@ public class DashboardActivity extends AppCompatActivity {
     private void initWidget() {
         Log.i(TAG, "initWidget: ");
 
-        getSupportActionBar().hide();
+     //   getSupportActionBar().hide();
 
         txtUserName = findViewById(R.id.txtUserName);
         txtOrderID = findViewById(R.id.txtOrderID);
@@ -97,7 +97,7 @@ public class DashboardActivity extends AppCompatActivity {
         btnPayment.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(DashboardActivity.this, CollectionActivity.class);
+                Intent intent = new Intent(DashboardActivity.this, PaymentCollectionActivity.class);
                 intent.putExtra("userModel", userModel);
                 intent.putExtra("userID", userID);
                 //startActivity(intent);
@@ -169,9 +169,9 @@ public class DashboardActivity extends AppCompatActivity {
                 @Override
                 public void onActivityResult(ActivityResult result) {
                     if (result.getResultCode() == Activity.RESULT_OK) {
-                        if(result.getData() != null && result.getData().getStringExtra(CollectionActivity.KEY_ORDER_ID) != null){
-                            txtOrderID.setText("Order ID: " + result.getData().getStringExtra(CollectionActivity.KEY_ORDER_ID));
-                            userModel.setOrderNo(result.getData().getStringExtra(CollectionActivity.KEY_ORDER_ID));
+                        if(result.getData() != null && result.getData().getStringExtra(PaymentCollectionActivity.KEY_ORDER_ID) != null){
+                            txtOrderID.setText("Order ID: " + result.getData().getStringExtra(PaymentCollectionActivity.KEY_ORDER_ID));
+                            userModel.setOrderNo(result.getData().getStringExtra(PaymentCollectionActivity.KEY_ORDER_ID));
                             Log.i(TAG, "onActivityResult: " + userModel.getOrderNo());
                         } else {
                             txtOrderID.setText("");
@@ -189,7 +189,7 @@ public class DashboardActivity extends AppCompatActivity {
                     if (result.getResultCode() == Activity.RESULT_OK) {
                         if(result.getData() != null && result.getData().getStringExtra(ExpenseActivity.KEY_ORDER_ID) != null){
                             txtOrderID.setText("Order ID: " + result.getData().getStringExtra(ExpenseActivity.KEY_ORDER_ID));
-                            userModel.setOrderNo(result.getData().getStringExtra(CollectionActivity.KEY_ORDER_ID));
+                            userModel.setOrderNo(result.getData().getStringExtra(PaymentCollectionActivity.KEY_ORDER_ID));
                             Log.i(TAG, "onActivityResult: " + userModel.getOrderNo());
                         } else {
                             txtOrderID.setText("");

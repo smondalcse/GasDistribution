@@ -2,6 +2,7 @@ package com.sanatmondal.gasdistribution.activity;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -10,6 +11,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -24,6 +26,7 @@ import com.google.gson.GsonBuilder;
 import com.sanatmondal.gasdistribution.R;
 import com.sanatmondal.gasdistribution.adapter.ReportItemAdapter;
 import com.sanatmondal.gasdistribution.adapter.SalesCollectionItemAdapter;
+import com.sanatmondal.gasdistribution.app.BaseActivity;
 import com.sanatmondal.gasdistribution.model.LoginModel;
 import com.sanatmondal.gasdistribution.model.ReportModel;
 import com.sanatmondal.gasdistribution.model.ResponseReport;
@@ -38,7 +41,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class ReportActivity extends AppCompatActivity {
+public class ReportActivity extends BaseActivity {
     private static final String TAG = "ReportActivity";
 
     private ActionBar toolbar;
@@ -109,9 +112,14 @@ public class ReportActivity extends AppCompatActivity {
 
     private void setupToolbar() {
         Log.i(TAG, "setupToolbar: ");
-        toolbar = getSupportActionBar();
-        toolbar.setDisplayHomeAsUpEnabled(true);
-        toolbar.setTitle("Report");
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        // Use BaseActivity method
+        initToolbar(toolbar, "Report");
+        // Optional: custom back handling
+        View btnBack = toolbar.findViewById(R.id.btnBack);
+        if (btnBack != null) {
+            btnBack.setOnClickListener(v -> finish());
+        }
     }
 
     @Override

@@ -3,6 +3,7 @@ package com.sanatmondal.gasdistribution.activity;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -46,6 +47,7 @@ import com.google.gson.GsonBuilder;
 import com.sanatmondal.gasdistribution.R;
 import com.sanatmondal.gasdistribution.adapter.CustomerModelAdapter;
 import com.sanatmondal.gasdistribution.adapter.ExpenseModelAdapter;
+import com.sanatmondal.gasdistribution.app.BaseActivity;
 import com.sanatmondal.gasdistribution.model.CustomerModel;
 import com.sanatmondal.gasdistribution.model.ExpenceModel;
 import com.sanatmondal.gasdistribution.model.LoginModel;
@@ -64,13 +66,13 @@ import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ExpenseActivity extends AppCompatActivity {
+public class ExpenseActivity extends BaseActivity {
     private static final String TAG = "ExpenseActivity";
 
     private ActionBar toolbar;
     UserModel userModel = new UserModel();
     String userID = "";
-    private TextView txtExpenseName;
+    private TextView txtExpenseName, txtWHName;
     private EditText etExpenseAmt, etComments;
     private Button btnExpenseSave, btnShowExpenseHead;
     ApiURL apiURL = new ApiURL();
@@ -168,6 +170,7 @@ public class ExpenseActivity extends AppCompatActivity {
         etExpenseAmt = findViewById(R.id.etExpenseAmt);
         etComments = findViewById(R.id.etComments);
         txtExpenseName = findViewById(R.id.txtExpenseName);
+
         btnShowExpenseHead = findViewById(R.id.btnShowExpenseHead);
         btnShowExpenseHead.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -201,13 +204,23 @@ public class ExpenseActivity extends AppCompatActivity {
 
             }
         });
+
+        txtWHName = findViewById(R.id.txtWHName);
+        if (userModel != null) {
+            txtWHName.setText(userModel.getWarehouseName());
+        }
     }
 
     private void setupToolbar() {
         Log.i(TAG, "setupToolbar: ");
-        toolbar = getSupportActionBar();
-        toolbar.setDisplayHomeAsUpEnabled(true);
-        toolbar.setTitle("Expense");
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        // Use BaseActivity method
+        initToolbar(toolbar, "Expense");
+        // Optional: custom back handling
+        View btnBack = toolbar.findViewById(R.id.btnBack);
+        if (btnBack != null) {
+            btnBack.setOnClickListener(v -> finish());
+        }
     }
 
     private void getparams() {
@@ -225,8 +238,8 @@ public class ExpenseActivity extends AppCompatActivity {
     String selectedDailyExpenceTypeID = "0";
     private void expenseBottomSheet() {
         Log.i(TAG, "expenseBottomSheet: ");
-        bottomSheetDialogExpenseHead = new BottomSheetDialog(ExpenseActivity.this, R.style.Theme_Design_BottomSheetDialog);
-        View bottomSheetView = LayoutInflater.from(getApplicationContext()).inflate(R.layout.layout_bottom_sheet_expense, (LinearLayout)findViewById(R.id.bottom_sheet_item));
+        bottomSheetDialogExpenseHead = new BottomSheetDialog(ExpenseActivity.this, com.google.android.material.R.style.Theme_Design_BottomSheetDialog);
+        View bottomSheetView = LayoutInflater.from(ExpenseActivity.this).inflate(R.layout.layout_bottom_sheet_expense, (LinearLayout)findViewById(R.id.bottom_sheet_item));
         RecyclerView recycleview_customer = bottomSheetView.findViewById(R.id.recycleview_customer);
         recycleview_customer.setLayoutManager(new LinearLayoutManager(this));
 
@@ -297,7 +310,7 @@ public class ExpenseActivity extends AppCompatActivity {
 
 
     private void setupFullHeight(BottomSheetDialog bottomSheetDialog) {
-        FrameLayout bottomSheet = (FrameLayout) bottomSheetDialog.findViewById(R.id.design_bottom_sheet);
+        FrameLayout bottomSheet = (FrameLayout) bottomSheetDialog.findViewById(com.google.android.material.R.id.design_bottom_sheet);
         BottomSheetBehavior behavior = BottomSheetBehavior.from(bottomSheet);
         ViewGroup.LayoutParams layoutParams = bottomSheet.getLayoutParams();
 
@@ -335,6 +348,7 @@ public class ExpenseActivity extends AppCompatActivity {
             String URL = apiURL.dailyExpenseInsert();
             Log.i(TAG, "dailyExpenseInsert: " + URL);
             JSONObject jsonBody = new JSONObject();
+            jsonBody.put("WHID", userModel.getwHNo());
             jsonBody.put("ExpenceAmt", ExpenceAmt);
             jsonBody.put("OrderNo", OrderNo);
             jsonBody.put("ExpenceTypeName", ExpenceTypeName);
@@ -353,7 +367,7 @@ public class ExpenseActivity extends AppCompatActivity {
                         Gson gson = builder.create();
                         ResponseFinallySave res = gson.fromJson(response, ResponseFinallySave.class);
                         if (res.getSuccess()) {
-                            Toast.makeText(ExpenseActivity.this, "Expense Save successfull.", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(ExpenseActivity.this, "Expense Save successfully.", Toast.LENGTH_SHORT).show();
                             resetAllValue();
                             Intent intent = new Intent();
                             intent.putExtra(KEY_ORDER_ID, res.getData());

@@ -15,6 +15,9 @@
             android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
+
+            <include layout="@layout/layout_toolbar" />
+
             <LinearLayout
                 android:layout_marginTop="30dp"
                 android:gravity="center"
@@ -54,6 +57,53 @@
                     android:text="Select Customer"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content" />
+
+                <LinearLayout
+                    android:orientation="vertical"
+                    android:layout_marginLeft="50dp"
+                    android:layout_marginRight="50dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <RelativeLayout
+                        android:orientation="horizontal"
+                        android:layout_marginBottom="5dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content">
+                            <TextView
+                                android:visibility="gone"
+                                android:text="WHNo:"
+                                android:textColor="@color/black"
+                                android:layout_width="50dp"
+                                android:layout_height="wrap_content" />
+                            <TextView
+                                android:id="@+id/txtWHNo"
+                                android:visibility="gone"
+                                android:textColor="@color/black"
+                                android:textStyle="bold"
+                                android:maxLines="1"
+                                android:text=""
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content" />
+
+                            <TextView
+                                android:id="@+id/txtWHName"
+                                android:layout_marginLeft="5dp"
+                                android:textColor="@color/black"
+                                android:textStyle="bold"
+                                android:maxLines="1"
+                                android:text=""
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content" />
+                        </LinearLayout>
+
+                    </RelativeLayout>
+
+                </LinearLayout>
 
                 <RelativeLayout
                     android:layout_marginTop="10dp"
@@ -109,61 +159,6 @@
                     android:layout_width="match_parent"
                     android:layout_height="48dp" />
 
-                <LinearLayout
-                    android:orientation="vertical"
-                    android:layout_marginTop="10dp"
-                    android:layout_marginLeft="50dp"
-                    android:layout_marginRight="50dp"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-
-                    <Button
-                        android:id="@+id/btnWarehouse"
-                        android:textAllCaps="false"
-                        android:text="Select Warehouse"
-                        android:backgroundTint="@color/green"
-                        android:drawableTint="@color/white"
-                        android:drawableLeft="@drawable/ic_add"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content" />
-
-                    <RelativeLayout
-                        android:orientation="horizontal"
-                        android:layout_marginBottom="5dp"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
-
-                        <LinearLayout
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content">
-                            <TextView
-                                android:text="WHNo:"
-                                android:textColor="@color/black"
-                                android:layout_width="50dp"
-                                android:layout_height="wrap_content" />
-                            <TextView
-                                android:id="@+id/txtWHNo"
-                                android:textColor="@color/black"
-                                android:textStyle="bold"
-                                android:maxLines="1"
-                                android:text=""
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content" />
-
-                            <TextView
-                                android:id="@+id/txtWHName"
-                                android:layout_marginLeft="5dp"
-                                android:textColor="@color/black"
-                                android:textStyle="bold"
-                                android:maxLines="1"
-                                android:text=""
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content" />
-                        </LinearLayout>
-
-                    </RelativeLayout>
-
-                </LinearLayout>
 
                 <Button
                     android:id="@+id/btnCreateCustomer"

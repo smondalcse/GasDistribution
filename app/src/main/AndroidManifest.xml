@@ -24,7 +24,7 @@
             android:name=".activity.SalesNewActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".activity.CollectionActivity"
+            android:name=".activity.PaymentCollectionActivity"
             android:exported="true"
             android:screenOrientation="portrait" />
         <activity

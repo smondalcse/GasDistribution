@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -12,6 +13,7 @@ import android.Manifest;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.ColorStateList;
 import android.database.Cursor;
@@ -56,6 +58,7 @@ import com.sanatmondal.gasdistribution.adapter.AutoCompleteAllItemModelAdapter;
 import com.sanatmondal.gasdistribution.adapter.ContactModelAdapter;
 import com.sanatmondal.gasdistribution.adapter.CustomerModelAdapter;
 import com.sanatmondal.gasdistribution.adapter.WarehouseModelAdapter;
+import com.sanatmondal.gasdistribution.app.BaseActivity;
 import com.sanatmondal.gasdistribution.model.ContactsModal;
 import com.sanatmondal.gasdistribution.model.CustomerModel;
 import com.sanatmondal.gasdistribution.model.CustomerResponse;
@@ -64,6 +67,7 @@ import com.sanatmondal.gasdistribution.model.ResponseDefault;
 import com.sanatmondal.gasdistribution.model.ResponseTempOrderSale;
 import com.sanatmondal.gasdistribution.model.ResponseWarehouse;
 import com.sanatmondal.gasdistribution.model.TEMPSalesFromCustomerOrderViewModel;
+import com.sanatmondal.gasdistribution.model.UserModel;
 import com.sanatmondal.gasdistribution.model.WarehouseModel;
 import com.sanatmondal.gasdistribution.network.ApiURL;
 import com.sanatmondal.gasdistribution.others.HideKeyboard;
@@ -76,12 +80,14 @@ import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CustomerActivity extends AppCompatActivity {
+public class CustomerActivity extends BaseActivity {
     private static final String TAG = "CustomerActivity";
     private ActionBar toolbar;
+    String userID = "";
+    UserModel userModel = new UserModel();
     private TextView txtSelectCustomer, txtWHNo, txtWHName;
     private EditText etCName,etCMobile,etCAddress;
-    private Button btnCreateCustomer, btnWarehouse;
+    private Button btnCreateCustomer;
     private ImageView imgContact;
     ApiURL apiURL = new ApiURL();
     private LinearLayout container;
@@ -93,9 +99,31 @@ public class CustomerActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_customer);
         setupToolbar();
+        getparams();
         getURL();
         initWidget();
+        setWareHouse();
         WarehouseBottomSheet();
+    }
+
+    private void getparams() {
+        Log.i(TAG, "getparams: ");
+        Intent intent = this.getIntent();
+        Bundle bundle = intent.getExtras();
+        userModel = (UserModel) bundle.getSerializable("userModel");
+        userID = bundle.getString("userID", "");
+        Log.i(TAG, "getparams: " + userModel.getOrderNo());
+    }
+
+    private void setWareHouse() {
+        Log.i(TAG, "setWareHouse: ");
+        if (userModel.getwHNo() != null) {
+            txtWHNo.setText(userModel.getwHNo());
+            txtWHName.setText(userModel.getWarehouseName());
+            selectedWarehouseModel = new WarehouseModel();
+            selectedWarehouseModel.setWHNo(userModel.getwHNo());
+            selectedWarehouseModel.setWarehouseName(userModel.getWarehouseName());
+        }
     }
 
     private void getURL() {
@@ -136,13 +164,7 @@ public class CustomerActivity extends AppCompatActivity {
         etCName = findViewById(R.id.etCName);
         etCMobile = findViewById(R.id.etCMobile);
         etCAddress = findViewById(R.id.etCAddress);
-        btnWarehouse = findViewById(R.id.btnWarehouse);
-        btnWarehouse.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                getWarehouse();
-            }
-        });
+
         btnCreateCustomer = findViewById(R.id.btnCreateCustomer);
         btnCreateCustomer.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -166,12 +188,10 @@ public class CustomerActivity extends AppCompatActivity {
                     return;
                 }
 
-                if (txtWHNo.getText().toString().equalsIgnoreCase(""))
-                {
+                if (txtWHNo.getText().toString().equalsIgnoreCase("")) {
                     Toast.makeText(getApplicationContext(), "Select warehouse.", Toast.LENGTH_SHORT).show();
                     return;
                 }
-
                 saveCustomer(name, mobile, add);
             }
         });
@@ -180,9 +200,14 @@ public class CustomerActivity extends AppCompatActivity {
 
     private void setupToolbar() {
         Log.i(TAG, "setupToolbar: ");
-        toolbar = getSupportActionBar();
-        toolbar.setDisplayHomeAsUpEnabled(true);
-        toolbar.setTitle("Customer");
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        // Use BaseActivity method
+        initToolbar(toolbar, "Customer");
+        // Optional: custom back handling
+        View btnBack = toolbar.findViewById(R.id.btnBack);
+        if (btnBack != null) {
+            btnBack.setOnClickListener(v -> finish());
+        }
     }
 
     @Override
@@ -301,8 +326,8 @@ public class CustomerActivity extends AppCompatActivity {
     List<ContactsModal> mContactsModals = new ArrayList<>();
     private void contactBottomSheet() {
         Log.i(TAG, "cutstomerBottomSheet: ");
-        bottomSheetDialogContact = new BottomSheetDialog(CustomerActivity.this, R.style.Theme_Design_BottomSheetDialog);
-        View bottomSheetView = LayoutInflater.from(getApplicationContext()).inflate(R.layout.layout_bottom_sheet_contact, (LinearLayout)findViewById(R.id.bottom_sheet_item));
+        bottomSheetDialogContact = new BottomSheetDialog(CustomerActivity.this, com.google.android.material.R.style.Theme_Design_BottomSheetDialog);
+        View bottomSheetView = LayoutInflater.from(CustomerActivity.this).inflate(R.layout.layout_bottom_sheet_contact, (LinearLayout)findViewById(R.id.bottom_sheet_item));
         RecyclerView recycleview_customer = bottomSheetView.findViewById(R.id.recycleview_contact);
         recycleview_customer.setLayoutManager(new LinearLayoutManager(this));
 
@@ -382,7 +407,7 @@ public class CustomerActivity extends AppCompatActivity {
     }
 
     private void setupFullHeight(BottomSheetDialog bottomSheetDialog) {
-        FrameLayout bottomSheet = (FrameLayout) bottomSheetDialog.findViewById(R.id.design_bottom_sheet);
+        FrameLayout bottomSheet = (FrameLayout) bottomSheetDialog.findViewById(com.google.android.material.R.id.design_bottom_sheet);
         BottomSheetBehavior behavior = BottomSheetBehavior.from(bottomSheet);
         ViewGroup.LayoutParams layoutParams = bottomSheet.getLayoutParams();
 
@@ -472,7 +497,6 @@ public class CustomerActivity extends AppCompatActivity {
         return listContactsModal;
     }
 
-
     private WarehouseModel selectedWarehouseModel;
     BottomSheetDialog bottomSheetDialogWarehouse;
     WarehouseModelAdapter adapterWarehouse;
@@ -480,8 +504,8 @@ public class CustomerActivity extends AppCompatActivity {
 
     private void WarehouseBottomSheet() {
         Log.i(TAG, "WarehouseBottomSheet: ");
-        bottomSheetDialogWarehouse = new BottomSheetDialog(CustomerActivity.this, R.style.Theme_Design_BottomSheetDialog);
-        View bottomSheetView = LayoutInflater.from(getApplicationContext()).inflate(R.layout.layout_bottom_sheet_warehouse, (LinearLayout)findViewById(R.id.bottom_sheet_item));
+        bottomSheetDialogWarehouse = new BottomSheetDialog(CustomerActivity.this, com.google.android.material.R.style.Theme_Design_BottomSheetDialog);
+        View bottomSheetView = LayoutInflater.from(CustomerActivity.this).inflate(R.layout.layout_bottom_sheet_warehouse, (LinearLayout)findViewById(R.id.bottom_sheet_item));
         RecyclerView recycleview_customer = bottomSheetView.findViewById(R.id.recycleview_customer);
         recycleview_customer.setLayoutManager(new LinearLayoutManager(this));
 

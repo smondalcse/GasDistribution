@@ -1,7 +1,7 @@
 package com.sanatmondal.gasdistribution.network;
 
 public class ApiURL {
-    String url = "http://152.89.106.226/gasdistribution/gasapi/version1/";
+    String url = "http://188.68.38.113/gas/gasapi/version1/";
 
     public String getLoginURL(String UserID, String Pass){
         String method = "login?";
@@ -10,9 +10,10 @@ public class ApiURL {
         return (url + method + params);
     }
 
-    public String getAllCustomerList(){
+    public String getAllCustomerList(String WhNo){
         String method = "allcustomerlist?";
-        return (url + method);
+        String params = "WhNo=" + WhNo;
+        return (url + method + params);
     }
 
     public String getALLExchangerList(){
@@ -47,7 +48,6 @@ public class ApiURL {
         return (url + method + params);
     }
 
-
     public String getTempOrderSales(String OrderNo){
         String method = "SelectOrderbyOrderNoForSalesCollection/" + OrderNo;
         return (url + method);
@@ -80,6 +80,11 @@ public class ApiURL {
 
     public String deleteTempDataUserWise(String OrderNo){
         String method = "DeleteTempDataUserWise/" + OrderNo;
+        return (url + method);
+    }
+
+    public String deleteTempDataUserWiseSINGLEExchangeUserWise(String UserID){
+        String method = "DeleteTempDataUserWiseSINGLEExchangeUserWise/" + UserID;
         return (url + method);
     }
 

@@ -3,6 +3,7 @@ package com.sanatmondal.gasdistribution.activity;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -53,6 +54,7 @@ import com.sanatmondal.gasdistribution.adapter.CollectionItemAdapter;
 import com.sanatmondal.gasdistribution.adapter.CustomerModelAdapter;
 import com.sanatmondal.gasdistribution.adapter.ItemModelAdapter;
 import com.sanatmondal.gasdistribution.adapter.SalesCollectionItemAdapter;
+import com.sanatmondal.gasdistribution.app.BaseActivity;
 import com.sanatmondal.gasdistribution.model.CustomerModel;
 import com.sanatmondal.gasdistribution.model.CustomerResponse;
 import com.sanatmondal.gasdistribution.model.ItemModel;
@@ -74,7 +76,7 @@ import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SalesNewActivity extends AppCompatActivity
+public class SalesNewActivity extends BaseActivity
         implements View.OnClickListener {
     private static final String TAG = "SalesNewActivity";
 
@@ -422,9 +424,14 @@ public class SalesNewActivity extends AppCompatActivity
 
     private void setupToolbar() {
         Log.i(TAG, "setupToolbar: ");
-        toolbar = getSupportActionBar();
-        toolbar.setDisplayHomeAsUpEnabled(true);
-        toolbar.setTitle("Sales");
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        // Use BaseActivity method
+        initToolbar(toolbar, "Sales");
+        // Optional: custom back handling
+        View btnBack = toolbar.findViewById(R.id.btnBack);
+        if (btnBack != null) {
+            btnBack.setOnClickListener(v -> finish());
+        }
     }
 
     private void getparams() {
@@ -449,8 +456,8 @@ public class SalesNewActivity extends AppCompatActivity
     List<CustomerModel> mCustomerModels = new ArrayList<>();
     private void cutstomerBottomSheet() {
         Log.i(TAG, "cutstomerBottomSheet: ");
-        bottomSheetDialogCustomer = new BottomSheetDialog(SalesNewActivity.this, R.style.Theme_Design_BottomSheetDialog);
-        View bottomSheetView = LayoutInflater.from(getApplicationContext()).inflate(R.layout.layout_bottom_sheet_customer, (LinearLayout)findViewById(R.id.bottom_sheet_item));
+        bottomSheetDialogCustomer = new BottomSheetDialog(SalesNewActivity.this, com.google.android.material.R.style.Theme_Design_BottomSheetDialog);
+        View bottomSheetView = LayoutInflater.from(SalesNewActivity.this).inflate(R.layout.layout_bottom_sheet_customer, (LinearLayout)findViewById(R.id.bottom_sheet_item));
         RecyclerView recycleview_customer = bottomSheetView.findViewById(R.id.recycleview_customer);
         recycleview_customer.setLayoutManager(new LinearLayoutManager(this));
 
@@ -539,8 +546,8 @@ public class SalesNewActivity extends AppCompatActivity
     private void itemBottomSheetItem() {
         Log.i(TAG, "initBottomSheetItem: ");
 
-        bottomSheetDialogItem = new BottomSheetDialog(SalesNewActivity.this, R.style.Theme_Design_BottomSheetDialog);
-        View bottomSheetView = LayoutInflater.from(getApplicationContext()).inflate(R.layout.layout_bottom_sheet_item, (LinearLayout)findViewById(R.id.bottom_sheet_item));
+        bottomSheetDialogItem = new BottomSheetDialog(SalesNewActivity.this, com.google.android.material.R.style.Theme_Design_BottomSheetDialog);
+        View bottomSheetView = LayoutInflater.from(SalesNewActivity.this).inflate(R.layout.layout_bottom_sheet_item, (LinearLayout)findViewById(R.id.bottom_sheet_item));
         RecyclerView recycleview_recipents = bottomSheetView.findViewById(R.id.recycleview_item);
         recycleview_recipents.setLayoutManager(new LinearLayoutManager(this));
 
@@ -628,7 +635,7 @@ public class SalesNewActivity extends AppCompatActivity
     }
 
     private void setupFullHeight(BottomSheetDialog bottomSheetDialog) {
-        FrameLayout bottomSheet = (FrameLayout) bottomSheetDialog.findViewById(R.id.design_bottom_sheet);
+        FrameLayout bottomSheet = (FrameLayout) bottomSheetDialog.findViewById(com.google.android.material.R.id.design_bottom_sheet);
         BottomSheetBehavior behavior = BottomSheetBehavior.from(bottomSheet);
         ViewGroup.LayoutParams layoutParams = bottomSheet.getLayoutParams();
 
@@ -650,6 +657,63 @@ public class SalesNewActivity extends AppCompatActivity
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     public void onClick(View view) {
+
+        int id = view.getId();
+
+        if (id == R.id.btnSales) {
+            enableDisableButtonLikeTab(0);
+            orderType = "1";
+            rvItems.setVisibility(View.VISIBLE);
+            rvItemsCollection.setVisibility(View.GONE);
+            linTitleSales.setVisibility(View.VISIBLE);
+            linTitleCollection.setVisibility(View.GONE);
+            linSalesOnly.setVisibility(View.VISIBLE);
+            txtItemName.setText("");
+            txtItemID.setText("");
+            etQty.setText("");
+
+        } else if (id == R.id.btnCollection) {
+            enableDisableButtonLikeTab(1);
+            orderType = "2";
+            rvItems.setVisibility(View.GONE);
+            rvItemsCollection.setVisibility(View.VISIBLE);
+            linTitleSales.setVisibility(View.GONE);
+            linTitleCollection.setVisibility(View.VISIBLE);
+            linSalesOnly.setVisibility(View.GONE);
+            txtItemName.setText("");
+            txtItemID.setText("");
+            etQty.setText("");
+
+        } else if (id == R.id.btnCustomer) {
+            getAllCustomerList(userModel.getOrderNo());
+
+        } else if (id == R.id.btnItem) {
+            getOrderItemList(userModel.getOrderNo());
+
+        } else if (id == R.id.btnAllItem) {
+            getAllItemList(userModel.getOrderNo());
+
+        } else if (id == R.id.btnCustomerRemove) {
+            resetCustomerValue();
+
+        } else if (id == R.id.btnCancel) {
+            if (mTempOrderSale.size() <= 0 && mTempOrderCollection.size() <= 0) {
+                Toast.makeText(this, "No Item or collection found for cancel.", Toast.LENGTH_SHORT).show();
+                return;
+            }
+            deleteTempDataUserWise(userID);
+
+        } else if (id == R.id.btnSave) {
+            if (mTempOrderCollection.size() <= 0 && mTempOrderSale.size() <= 0) {
+                Toast.makeText(getApplicationContext(), "No item found for save.", Toast.LENGTH_SHORT).show();
+                return;
+            }
+            showOrderSaveAlert(txtTotalBill.getText().toString(), etPayAmt.getText().toString());
+        }
+
+
+
+/*
         switch (view.getId()){
             case R.id.btnSales:
                 enableDisableButtonLikeTab(0);
@@ -704,13 +768,13 @@ public class SalesNewActivity extends AppCompatActivity
                 showOrderSaveAlert(txtTotalBill.getText().toString(), etPayAmt.getText().toString());
 
                 break;
-        }
+        }*/
     }
 
     private void getAllCustomerList(String Orderno){
 
         final ProgressDialog dialog = ProgressDialog.show(this, "", "Please wait...", false, false);
-        String URL = apiURL.getAllCustomerList();
+        String URL = apiURL.getAllCustomerList(userModel.getwHNo());
         Log.i(TAG, "getAllCustomerList: " + URL);
         StringRequest request = new StringRequest(URL, new Response.Listener<String>() {
             @Override
@@ -1221,6 +1285,7 @@ public class SalesNewActivity extends AppCompatActivity
             JSONObject jsonBody = new JSONObject();
             jsonBody.put("OrderNo", orderNo);
             jsonBody.put("CustomerID", custID);
+            jsonBody.put("WHID", userModel.getwHNo());
 
             jsonBody.put("TotalItemPrice", itemPrice);
             jsonBody.put("AddCharge", "0");

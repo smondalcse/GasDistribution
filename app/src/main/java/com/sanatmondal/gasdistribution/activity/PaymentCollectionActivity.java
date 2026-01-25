@@ -3,6 +3,7 @@ package com.sanatmondal.gasdistribution.activity;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -10,7 +11,6 @@ import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.res.ColorStateList;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.Editable;
@@ -46,9 +46,9 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.sanatmondal.gasdistribution.R;
 import com.sanatmondal.gasdistribution.adapter.CustomerModelAdapter;
+import com.sanatmondal.gasdistribution.app.BaseActivity;
 import com.sanatmondal.gasdistribution.model.CustomerModel;
 import com.sanatmondal.gasdistribution.model.CustomerResponse;
-import com.sanatmondal.gasdistribution.model.ResponseDefault;
 import com.sanatmondal.gasdistribution.model.ResponseFinallySave;
 import com.sanatmondal.gasdistribution.model.UserModel;
 import com.sanatmondal.gasdistribution.network.ApiURL;
@@ -62,12 +62,12 @@ import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CollectionActivity extends AppCompatActivity {
+public class PaymentCollectionActivity extends BaseActivity {
     private static final String TAG = "CollectionActivity";
 
     private ActionBar toolbar;
     private Button btnCustomer, btnCreateCustomer;
-    private TextView txtCustID, txtCustName, txtCustMobile, txtDueAmount, txtCurrentDue;
+    private TextView txtWHName, txtCustID, txtCustName, txtCustMobile, txtDueAmount, txtCurrentDue;
     private EditText etPayAmt;
     private CustomerModel selectedCustomerModel;
     BottomSheetDialog bottomSheetDialogCustomer;
@@ -104,7 +104,6 @@ public class CollectionActivity extends AppCompatActivity {
         Bundle bundle = intent.getExtras();
         userModel = (UserModel) bundle.getSerializable("userModel");
         userID = bundle.getString("userID", "");
-     //   orderNo = bundle.getString("orderNo", "");
         Log.i(TAG, "getparams: " + userModel.getOrderNo());
     }
 
@@ -116,7 +115,7 @@ public class CollectionActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Log.i(TAG, "onClick: ");
-                hideKeyboard.hideSoftKeyboard(CollectionActivity.this);
+                hideKeyboard.hideSoftKeyboard(PaymentCollectionActivity.this);
             }
         });
 
@@ -173,13 +172,22 @@ public class CollectionActivity extends AppCompatActivity {
             }
         });
 
+        txtWHName = findViewById(R.id.txtWHName);
+        if (userModel != null) {
+            txtWHName.setText(userModel.getWarehouseName());
+        }
     }
 
     private void setupToolbar() {
         Log.i(TAG, "setupToolbar: ");
-        toolbar = getSupportActionBar();
-        toolbar.setDisplayHomeAsUpEnabled(true);
-        toolbar.setTitle("Collection");
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        // Use BaseActivity method
+        initToolbar(toolbar, "Collection");
+        // Optional: custom back handling
+        View btnBack = toolbar.findViewById(R.id.btnBack);
+        if (btnBack != null) {
+            btnBack.setOnClickListener(v -> finish());
+        }
     }
 
     @Override
@@ -192,8 +200,8 @@ public class CollectionActivity extends AppCompatActivity {
 
     private void cutstomerBottomSheet() {
         Log.i(TAG, "cutstomerBottomSheet: ");
-        bottomSheetDialogCustomer = new BottomSheetDialog(CollectionActivity.this, R.style.Theme_Design_BottomSheetDialog);
-        View bottomSheetView = LayoutInflater.from(getApplicationContext()).inflate(R.layout.layout_bottom_sheet_customer, (LinearLayout)findViewById(R.id.bottom_sheet_item));
+        bottomSheetDialogCustomer = new BottomSheetDialog(PaymentCollectionActivity.this, com.google.android.material.R.style.Theme_Design_BottomSheetDialog);
+        View bottomSheetView = LayoutInflater.from(PaymentCollectionActivity.this).inflate(R.layout.layout_bottom_sheet_customer, (LinearLayout)findViewById(R.id.bottom_sheet_item));
         RecyclerView recycleview_customer = bottomSheetView.findViewById(R.id.recycleview_customer);
         recycleview_customer.setLayoutManager(new LinearLayoutManager(this));
 
@@ -264,8 +272,9 @@ public class CollectionActivity extends AppCompatActivity {
         });
     }
 
+    //region Height calculation
     private void setupFullHeight(BottomSheetDialog bottomSheetDialog) {
-        FrameLayout bottomSheet = (FrameLayout) bottomSheetDialog.findViewById(R.id.design_bottom_sheet);
+        FrameLayout bottomSheet = (FrameLayout) bottomSheetDialog.findViewById(com.google.android.material.R.id.design_bottom_sheet);
         BottomSheetBehavior behavior = BottomSheetBehavior.from(bottomSheet);
         ViewGroup.LayoutParams layoutParams = bottomSheet.getLayoutParams();
 
@@ -276,6 +285,7 @@ public class CollectionActivity extends AppCompatActivity {
         bottomSheet.setLayoutParams(layoutParams);
         behavior.setState(BottomSheetBehavior.STATE_EXPANDED);
     }
+    //endregion
 
     private void filterListCustomer(String text) {
         ArrayList<CustomerModel> filteredList = new ArrayList<>();
@@ -300,7 +310,7 @@ public class CollectionActivity extends AppCompatActivity {
 
 
         final ProgressDialog dialog = ProgressDialog.show(this, "", "Please wait...", false, false);
-        String URL = apiURL.getAllCustomerList();
+        String URL = apiURL.getAllCustomerList(userModel.getwHNo());
         Log.i(TAG, "getAllCustomerList: " + URL);
         StringRequest request = new StringRequest(URL, new Response.Listener<String>() {
             @Override
@@ -371,14 +381,14 @@ public class CollectionActivity extends AppCompatActivity {
                         Gson gson = builder.create();
                         ResponseFinallySave res = gson.fromJson(response, ResponseFinallySave.class);
                         if(res.getSuccess()) {
-                            Toast.makeText(CollectionActivity.this, "Collection Save successfull.", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(PaymentCollectionActivity.this, "Collection Save successfull.", Toast.LENGTH_SHORT).show();
                             resetAllField();
                             Intent intent = new Intent();
                             intent.putExtra(KEY_ORDER_ID, res.getData());
                             setResult(RESULT_OK, intent);
                             finish();
                         } else {
-                            Toast.makeText(CollectionActivity.this, "Collection Save failed.", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(PaymentCollectionActivity.this, "Collection Save failed.", Toast.LENGTH_SHORT).show();
                         }
 
                         dialog.dismiss();
@@ -483,7 +493,7 @@ public class CollectionActivity extends AppCompatActivity {
         String msgDefault = "Are you sure you want to save?";
         String message = "PreDue: " + PreDue + ", \n" + "PayAmt: " + payAmt;
 
-        new AlertDialog.Builder(CollectionActivity.this)
+        new AlertDialog.Builder(PaymentCollectionActivity.this)
                 .setTitle(msgDefault)
                 .setMessage(message)
                 .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {

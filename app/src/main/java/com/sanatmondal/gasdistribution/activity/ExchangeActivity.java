@@ -3,6 +3,7 @@ package com.sanatmondal.gasdistribution.activity;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -54,6 +55,7 @@ import com.sanatmondal.gasdistribution.adapter.ExchangerItemAdapter;
 import com.sanatmondal.gasdistribution.adapter.ItemModelAdapter;
 import com.sanatmondal.gasdistribution.adapter.SalesCollectionItemAdapter;
 import com.sanatmondal.gasdistribution.adapter.WarehouseModelAdapter;
+import com.sanatmondal.gasdistribution.app.BaseActivity;
 import com.sanatmondal.gasdistribution.model.CustomerModel;
 import com.sanatmondal.gasdistribution.model.CustomerResponse;
 import com.sanatmondal.gasdistribution.model.ExchangerItemListModel;
@@ -81,7 +83,7 @@ import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ExchangeActivity extends AppCompatActivity
+public class ExchangeActivity extends BaseActivity
         implements View.OnClickListener{
     private static final String TAG = "ExchangeActivity";
 
@@ -90,8 +92,9 @@ public class ExchangeActivity extends AppCompatActivity
     String userID = "";
 
     Button btnCustomer, btnItem, btnAllItem;
-    private TextView txtCustID, txtCustName, txtCustMobile, txtCustStock, txtCustAddress, txtItemID, txtItemName, txtTotalGiveQty, txtTotRecQty, txtWHNo, txtWHName;
-    private Button btnGive, btnReceive, btnAddItem, btnCustomerRemove, btnCancel, btnSave, btnWarehouse;
+    private TextView txtCustID, txtCustName, txtCustMobile, txtCustStock, txtCustAddress, txtItemID, txtItemName, txtTotalGiveQty,
+            txtTotRecQty, txtWHNo, txtWHName, txtItemQty;
+    private Button btnGive, btnReceive, btnAddItem, btnCustomerRemove, btnCancel, btnSave;
     private ArrayList<Button> buttons = new ArrayList<Button>();
     String orderType = "0";
     private EditText etQty, etAddCost, etLessCost;
@@ -116,14 +119,23 @@ public class ExchangeActivity extends AppCompatActivity
         getURL();
         getparams();
         initWidget();
+        setWareHouse();
         itemBottomSheetItem();
         cutstomerBottomSheet();
-        WarehouseBottomSheet();
+     //   WarehouseBottomSheet();
         buildRecycleView();
-      //  buildRecycleViewCollection();
-        //getTempOrderSales();
-
         deleteTempDataUserWise(userID, "first");
+    }
+
+    private void setWareHouse() {
+        Log.i(TAG, "setWareHouse: ");
+        if (userModel.getwHNo() != null) {
+            txtWHNo.setText(userModel.getwHNo());
+            txtWHName.setText(userModel.getWarehouseName());
+            selectedWarehouseModel = new WarehouseModel();
+            selectedWarehouseModel.setWHNo(userModel.getwHNo());
+            selectedWarehouseModel.setWarehouseName(userModel.getWarehouseName());
+        }
     }
 
     private void getURL() {
@@ -134,9 +146,14 @@ public class ExchangeActivity extends AppCompatActivity
 
     private void setupToolbar() {
         Log.i(TAG, "setupToolbar: ");
-        toolbar = getSupportActionBar();
-        toolbar.setDisplayHomeAsUpEnabled(true);
-        toolbar.setTitle("Exchange");
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        // Use BaseActivity method
+        initToolbar(toolbar, "Exchange");
+        // Optional: custom back handling
+        View btnBack = toolbar.findViewById(R.id.btnBack);
+        if (btnBack != null) {
+            btnBack.setOnClickListener(v -> finish());
+        }
     }
 
     private void getparams() {
@@ -174,7 +191,6 @@ public class ExchangeActivity extends AppCompatActivity
         linTitleSales.setVisibility(View.VISIBLE);
         linTitleCollection.setVisibility(View.GONE);
 
-        btnWarehouse = findViewById(R.id.btnWarehouse);
         btnCustomer = findViewById(R.id.btnCustomer);
         btnItem = findViewById(R.id.btnItem);
         btnAllItem = findViewById(R.id.btnAllItem);
@@ -191,8 +207,8 @@ public class ExchangeActivity extends AppCompatActivity
 
         txtWHNo = findViewById(R.id.txtWHNo);
         txtWHName = findViewById(R.id.txtWHName);
+        txtItemQty = findViewById(R.id.txtItemQty);
 
-        btnWarehouse.setOnClickListener(this);
         btnCustomer.setOnClickListener(this);
         btnItem.setOnClickListener(this);
         btnAllItem.setOnClickListener(this);
@@ -335,6 +351,11 @@ public class ExchangeActivity extends AppCompatActivity
         txtCustName.setText("");
         txtCustMobile.setText("");
         txtCustStock.setText("");
+        txtTotalGiveQty.setText("0.0");
+        txtTotRecQty.setText("0.0");
+        etAddCost.setText("0.0");
+        etLessCost.setText("0.0");
+        txtItemQty.setText("");
         selectedCustomerModel = null;
         btnCustomer.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.green)));
         btnCustomer.setClickable(true);
@@ -353,6 +374,7 @@ public class ExchangeActivity extends AppCompatActivity
                     btn.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.purple_500)));
 
                     btnItem.setVisibility(View.GONE);
+                    txtItemQty.setVisibility(View.GONE);
                     btnAllItem.setVisibility(View.VISIBLE);
                     btnAddItem.setText("Add Collection Item");
 
@@ -362,13 +384,14 @@ public class ExchangeActivity extends AppCompatActivity
                     btn.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.gray)));
 
                     btnItem.setVisibility(View.VISIBLE);
+                    txtItemQty.setVisibility(View.VISIBLE);
                     btnAllItem.setVisibility(View.GONE);
                     btnAddItem.setText("Add Sales Item");
                 }
             }
         }
     }
-
+/*
     BottomSheetDialog bottomSheetDialogWarehouse;
     WarehouseModelAdapter adapterWarehouse;
     List<WarehouseModel> mWarehouse = new ArrayList<>();
@@ -443,14 +466,14 @@ public class ExchangeActivity extends AppCompatActivity
             }
         });
     }
-
+*/
     BottomSheetDialog bottomSheetDialogCustomer;
     CustomerModelAdapter adapterCustomer;
     List<CustomerModel> mCustomerModels = new ArrayList<>();
     private void cutstomerBottomSheet() {
         Log.i(TAG, "cutstomerBottomSheet: ");
-        bottomSheetDialogCustomer = new BottomSheetDialog(ExchangeActivity.this, R.style.Theme_Design_BottomSheetDialog);
-        View bottomSheetView = LayoutInflater.from(getApplicationContext()).inflate(R.layout.layout_bottom_sheet_customer, (LinearLayout)findViewById(R.id.bottom_sheet_item));
+        bottomSheetDialogCustomer = new BottomSheetDialog(ExchangeActivity.this, com.google.android.material.R.style.Theme_Design_BottomSheetDialog);
+        View bottomSheetView = LayoutInflater.from(ExchangeActivity.this).inflate(R.layout.layout_bottom_sheet_customer, (LinearLayout)findViewById(R.id.bottom_sheet_item));
         RecyclerView recycleview_customer = bottomSheetView.findViewById(R.id.recycleview_customer);
         recycleview_customer.setLayoutManager(new LinearLayoutManager(this));
 
@@ -530,11 +553,12 @@ public class ExchangeActivity extends AppCompatActivity
     BottomSheetDialog bottomSheetDialogItem;
     ItemModelAdapter adapterItem;
     List<ItemModel> mItemModels = new ArrayList<>();
+    ItemModel selectedItemModel = new ItemModel();
     private void itemBottomSheetItem() {
         Log.i(TAG, "initBottomSheetItem: ");
 
-        bottomSheetDialogItem = new BottomSheetDialog(ExchangeActivity.this, R.style.Theme_Design_BottomSheetDialog);
-        View bottomSheetView = LayoutInflater.from(getApplicationContext()).inflate(R.layout.layout_bottom_sheet_item, (LinearLayout)findViewById(R.id.bottom_sheet_item));
+        bottomSheetDialogItem = new BottomSheetDialog(ExchangeActivity.this, com.google.android.material.R.style.Theme_Design_BottomSheetDialog);
+        View bottomSheetView = LayoutInflater.from(ExchangeActivity.this).inflate(R.layout.layout_bottom_sheet_item, (LinearLayout)findViewById(R.id.bottom_sheet_item));
         RecyclerView recycleview_recipents = bottomSheetView.findViewById(R.id.recycleview_item);
         recycleview_recipents.setLayoutManager(new LinearLayoutManager(this));
 
@@ -561,7 +585,8 @@ public class ExchangeActivity extends AppCompatActivity
                 }
                 txtItemID.setText(mData.get(position).getItemId());
                 txtItemName.setText(mData.get(position).getItemName());
-
+                selectedItemModel = mData.get(position);
+                txtItemQty.setText("Stock: " + selectedItemModel.getInvQty());
                 bottomSheetDialogItem.dismiss();
             }
         });
@@ -618,7 +643,7 @@ public class ExchangeActivity extends AppCompatActivity
     }
 
     private void setupFullHeight(BottomSheetDialog bottomSheetDialog) {
-        FrameLayout bottomSheet = (FrameLayout) bottomSheetDialog.findViewById(R.id.design_bottom_sheet);
+        FrameLayout bottomSheet = (FrameLayout) bottomSheetDialog.findViewById(com.google.android.material.R.id.design_bottom_sheet);
         BottomSheetBehavior behavior = BottomSheetBehavior.from(bottomSheet);
         ViewGroup.LayoutParams layoutParams = bottomSheet.getLayoutParams();
 
@@ -635,11 +660,69 @@ public class ExchangeActivity extends AppCompatActivity
         DisplayMetrics displayMetrics = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
         return displayMetrics.heightPixels;
+
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
+    
     @Override
     public void onClick(View view) {
+            int id = view.getId();
+
+            if (id == R.id.btnGive) {
+                enableDisableButtonLikeTab(0);
+                orderType = "1";
+                rvItems.setVisibility(View.VISIBLE);
+                // rvItemsCollection.setVisibility(View.GONE);
+                linTitleSales.setVisibility(View.VISIBLE);
+                // linTitleCollection.setVisibility(View.GONE);
+                txtItemName.setText("");
+                txtItemID.setText("");
+                etQty.setText("");
+
+            } else if (id == R.id.btnReceive) {
+                enableDisableButtonLikeTab(1);
+                orderType = "2";
+                // rvItems.setVisibility(View.GONE);
+                // rvItemsCollection.setVisibility(View.VISIBLE);
+                // linTitleSales.setVisibility(View.GONE);
+                // linTitleCollection.setVisibility(View.VISIBLE);
+                txtItemName.setText("");
+                txtItemID.setText("");
+                etQty.setText("");
+
+            } else if (id == R.id.btnCustomer) {
+                getALLExchangerList(userModel.getOrderNo());
+
+            } else if (id == R.id.btnItem) {
+                if (selectedWarehouseModel != null) {
+                    getALLItemListForExchange(selectedWarehouseModel.getWHNo());
+                } else {
+                    Toast.makeText(this, "Select Warehouse first.", Toast.LENGTH_SHORT).show();
+                }
+
+            } else if (id == R.id.btnAllItem) {
+                getAllItemList(userModel.getOrderNo());
+
+            } else if (id == R.id.btnCustomerRemove) {
+                resetCustomerValue();
+
+            } else if (id == R.id.btnCancel) {
+                if (mTempOrderSale.size() <= 0 && mTempOrderCollection.size() <= 0) {
+                    Toast.makeText(this, "No Item or collection found for cancel.", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                deleteTempDataUserWise(userID, "cancel");
+
+            } else if (id == R.id.btnSave) {
+                if (mTempOrderCollection.size() <= 0 && mTempOrderSale.size() <= 0) {
+                    Toast.makeText(getApplicationContext(), "No item found for save.", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                showOrderSaveAlert();
+            }
+
+
+/*
         switch (view.getId()){
             case R.id.btnGive:
                 enableDisableButtonLikeTab(0);
@@ -665,9 +748,6 @@ public class ExchangeActivity extends AppCompatActivity
                 break;
             case R.id.btnCustomer:
                 getALLExchangerList(userModel.getOrderNo());
-                break;
-            case R.id.btnWarehouse:
-                getWarehouse();
                 break;
             case R.id.btnItem:
                 //getOrderItemList(userModel.getOrderNo());
@@ -697,60 +777,7 @@ public class ExchangeActivity extends AppCompatActivity
                 }
                 showOrderSaveAlert();
                 break;
-        }
-    }
-
-    private void getWarehouse() {
-        Log.i(TAG, "getWarehouse: ");
-
-        final ProgressDialog dialog = ProgressDialog.show(this, "", "Please wait...", false, false);
-        String URL = apiURL.getWarehouseList();
-        Log.i(TAG, "getWarehouse: " + URL);
-        StringRequest request = new StringRequest(URL, new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
-                Log.i(TAG, "onResponse: ");
-                Log.i(TAG, "onResponse: " + response);
-                GsonBuilder builder = new GsonBuilder();
-                Gson gson = builder.create();
-                ResponseWarehouse res = gson.fromJson(response, ResponseWarehouse.class);
-
-                if (res.getData() != null) {
-                    mWarehouse.clear();
-                    mWarehouse.addAll(res.getData());
-                    adapterWarehouse.notifyDataSetChanged();
-                    bottomSheetDialogWarehouse.show();
-                    dialog.dismiss();
-                }
-
-                dialog.dismiss();
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                dialog.dismiss();
-                Log.i(TAG, "onErrorResponse: " + error.getMessage());
-            }
-        });
-
-        RequestQueue queue = Volley.newRequestQueue(this);
-        queue.add(request);
-        request.setRetryPolicy(new RetryPolicy() {
-            @Override
-            public int getCurrentTimeout() {
-                return 50000;
-            }
-
-            @Override
-            public int getCurrentRetryCount() {
-                return 50000;
-            }
-
-            @Override
-            public void retry(VolleyError error) throws VolleyError {
-
-            }
-        });
+        }*/
     }
 
     private void getALLExchangerList(String Orderno){
@@ -963,7 +990,7 @@ public class ExchangeActivity extends AppCompatActivity
         }
         adapterCustomer.filterListCustomer(filteredList);
     }
-
+/*
     private void filterListWarehouse(String text) {
         ArrayList<WarehouseModel> filteredList = new ArrayList<>();
 
@@ -974,7 +1001,7 @@ public class ExchangeActivity extends AppCompatActivity
         }
         adapterWarehouse.filterListCustomer(filteredList);
     }
-
+*/
     private RecyclerView rvItems;
     private RecyclerView.LayoutManager mLayoutManager;
     List<ExchangerItemListModel> mTempOrderSale = new ArrayList<>();
@@ -1002,7 +1029,7 @@ public class ExchangeActivity extends AppCompatActivity
     }
 
     List<TempOrderSale> mTempOrderCollection = new ArrayList<>();
-    private CollectionItemAdapter mCollectionItemAdapter;
+  //  private CollectionItemAdapter mCollectionItemAdapter;
     /*
     private void buildRecycleViewCollection() {
         Log.i(TAG, "buildRecycleView: ");
@@ -1031,6 +1058,16 @@ public class ExchangeActivity extends AppCompatActivity
     private void saveExchangeItemTemp(TEMPReplacementModel itemModel){
 
         try {
+            if (itemModel.getType().equalsIgnoreCase("give")) {
+                String qty = itemModel.getGQty();
+                Double dQty = Double.valueOf(qty);
+                if (selectedItemModel.getInvQty() < dQty) {
+                    Toast.makeText(this, "Receive qty should be less than stock qty.", Toast.LENGTH_SHORT).show();
+                    dialog.dismiss();
+                    return;
+                }
+            }
+
             RequestQueue requestQueue = Volley.newRequestQueue(this);
             String URL = apiURL.AddToTEMPReplacement();
             Log.i(TAG, "saveExchangeItemTemp: " + URL);
@@ -1354,6 +1391,7 @@ public class ExchangeActivity extends AppCompatActivity
             jsonBody.put("LessAmount", LessAmount);
             jsonBody.put("WarehouseID", selectedWarehouseModel.getWHNo());
             jsonBody.put("CreateBy", userID);
+            jsonBody.put("OrderNo", userModel.getOrderNo());
 
             final String requestBody = jsonBody.toString();
             Log.i(TAG, "FinallySaveExchange: " + URL);
@@ -1441,8 +1479,8 @@ public class ExchangeActivity extends AppCompatActivity
     private void deleteTempDataUserWise(String UserID, String callingTime){
 
         final ProgressDialog dialog = ProgressDialog.show(this, "", "Please wait...", false, false);
-        String URL = apiURL.deleteTempDataUserWise(UserID);
-        Log.i(TAG, "deleteTempDataUserWise: " + URL);
+        String URL = apiURL.deleteTempDataUserWiseSINGLEExchangeUserWise(UserID);
+        Log.i(TAG, "DeleteTempDataUserWiseSINGLEExchangeUserWise: " + URL);
         StringRequest request = new StringRequest(Request.Method.POST, URL, new Response.Listener<String>() {
             @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
             @Override
@@ -1459,7 +1497,7 @@ public class ExchangeActivity extends AppCompatActivity
                         mTempOrderSale.clear();
                         mTempOrderCollection.clear();
                         salesCollectionItemAdapter.notifyDataSetChanged();
-                        mCollectionItemAdapter.notifyDataSetChanged();
+                   //     mCollectionItemAdapter.notifyDataSetChanged();
                         btnCustomerRemove.setVisibility(View.VISIBLE);
                         resetAllValue("deleteTempDataUserWise");
 
