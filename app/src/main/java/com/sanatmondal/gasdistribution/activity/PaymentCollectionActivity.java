@@ -381,19 +381,20 @@ public class PaymentCollectionActivity extends BaseActivity {
                         Gson gson = builder.create();
                         ResponseFinallySave res = gson.fromJson(response, ResponseFinallySave.class);
                         if(res.getSuccess()) {
-                            Toast.makeText(PaymentCollectionActivity.this, "Collection Save successfull.", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(PaymentCollectionActivity.this, res.getMsg(), Toast.LENGTH_SHORT).show();
                             resetAllField();
                             Intent intent = new Intent();
                             intent.putExtra(KEY_ORDER_ID, res.getData());
                             setResult(RESULT_OK, intent);
                             finish();
                         } else {
-                            Toast.makeText(PaymentCollectionActivity.this, "Collection Save failed.", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(PaymentCollectionActivity.this, res.getMsg(), Toast.LENGTH_SHORT).show();
                         }
 
                         dialog.dismiss();
                     } catch (Exception e) {
                         dialog.dismiss();
+                        Toast.makeText(PaymentCollectionActivity.this, "Error Found.", Toast.LENGTH_SHORT).show();
                         e.printStackTrace();
                     }
                 }

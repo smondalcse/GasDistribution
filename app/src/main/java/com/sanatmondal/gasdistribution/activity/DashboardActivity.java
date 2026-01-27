@@ -12,7 +12,9 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.sanatmondal.gasdistribution.R;
 import com.sanatmondal.gasdistribution.model.UserModel;
@@ -20,7 +22,7 @@ import com.sanatmondal.gasdistribution.model.UserModel;
 public class DashboardActivity extends AppCompatActivity {
     private static final String TAG = "DashboardActivity";
 
-    CardView btnCustomer, btnSales, btnExchange, btnPayment, btnExpense, btnReport;
+    CardView btnCustomer, btnSales, btnExchange, btnPayment, btnExpense, btnReport, btnSignout;
     UserModel userModel = new UserModel();
     String userID = "";
     private TextView txtUserName, txtOrderID;
@@ -125,6 +127,14 @@ public class DashboardActivity extends AppCompatActivity {
                 intent.putExtra("userID", userID);
                 //    intent.putExtra("orderNo", txtOrderID.getText().toString());
                 startActivity(intent);
+            }
+        });
+
+        btnSignout = findViewById(R.id.btnSignout);
+        btnSignout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
             }
         });
     }

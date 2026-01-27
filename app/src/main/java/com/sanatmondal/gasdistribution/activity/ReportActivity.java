@@ -157,11 +157,11 @@ public class ReportActivity extends BaseActivity {
                     if (responseReport.getData().getCollectionHistory().size() > 0){
                         reportModelList.addAll(responseReport.getData().getCollectionHistory());
                         for (ReportModel model: responseReport.getData().getCollectionHistory()) {
-                            totlSalesPrice = totlSalesPrice + model.getTotalSPrice();
-                            tolAssQty = tolAssQty + model.getAssignQty();
-                            totColQty = totColQty + model.getCylinder();
-                            totReFil = totReFil + model.getGasOnly();
-                            totPkg = totPkg + model.getGasCylinderBoth();
+                            totlSalesPrice = totlSalesPrice + (model.getTotalSPrice() == null ? 0 : model.getTotalSPrice());
+                            tolAssQty = tolAssQty + (model.getAssignQty() == null ? 0 : model.getAssignQty());
+                            totColQty = totColQty + (model.getCylinder() == null ? 0 : model.getCylinder());
+                            totReFil = totReFil + (model.getGasOnly() == null ? 0 : model.getGasOnly());
+                            totPkg = totPkg + (model.getGasCylinderBoth() == null ? 0 : model.getGasCylinderBoth());
                         }
                         setModelValue();
                         if (responseReport.getData().getCollectionExpense() != null) {

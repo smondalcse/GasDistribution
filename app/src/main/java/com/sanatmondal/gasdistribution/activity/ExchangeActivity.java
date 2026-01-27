@@ -353,8 +353,10 @@ public class ExchangeActivity extends BaseActivity
         txtCustStock.setText("");
         txtTotalGiveQty.setText("0.0");
         txtTotRecQty.setText("0.0");
-        etAddCost.setText("0.0");
-        etLessCost.setText("0.0");
+        etAddCost.setText("");
+        etAddCost.setHint("0.0");
+        etLessCost.setText("");
+        etLessCost.setHint("0.0");
         txtItemQty.setText("");
         selectedCustomerModel = null;
         btnCustomer.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.green)));

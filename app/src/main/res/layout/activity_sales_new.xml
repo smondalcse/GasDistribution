@@ -7,9 +7,13 @@
     android:layout_height="match_parent"
     tools:context=".activity.SalesActivity">
 
-    <RelativeLayout
+    <LinearLayout
+        android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+
+        <include layout="@layout/layout_toolbar" />
+
         <ScrollView
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
@@ -21,8 +25,6 @@
                 android:background="@color/white"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
-
-                <include layout="@layout/layout_toolbar" />
 
                 <LinearLayout
                     android:layout_marginTop="10dp"
@@ -863,12 +865,19 @@
                             android:layout_height="wrap_content" />
                     </LinearLayout>
 
+                    <LinearLayout
+                        android:layout_alignParentBottom="true"
+                        android:layout_width="match_parent"
+                        android:layout_height="350dp">
+
+                    </LinearLayout>
+
                 </LinearLayout>
 
             </LinearLayout>
 
         </ScrollView>
 
-    </RelativeLayout>
+    </LinearLayout>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
